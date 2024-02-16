@@ -31,11 +31,13 @@ export class ObstacleService {
   private obstacles: Obstacle[] = [];
 
   private createObstacle(canvasWidth, canvasHeight): void {
+    const obstacleHeight = Math.random() * 0.3 * canvasHeight;
+    const posY = Math.random() < 0.5 ? 0 : canvasHeight - obstacleHeight;
     const obstacle = new Obstacle(
       canvasWidth, // начальная позиция x (за пределами видимости)
-      0,                                    // начальная позиция y
+      posY, // начальная позиция y
       25,                                   // ширина препятствия
-      Math.random() * (canvasHeight - 100) + 50, // высота препятствия (случайная)
+      obstacleHeight, // высота препятствия (случайная)
       'green'                               // цвет препятствия
     );
     this.obstacles.push(obstacle);
