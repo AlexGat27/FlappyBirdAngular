@@ -37,13 +37,16 @@ export class GameService{
   }
 
   StartGame(): void {
+    console.log("Start");
     this.gameInterval = setInterval(() => {
       this.update();
-    }, 25);
+    }, 40);
   }
   StopGame(): void {
+    console.log("Stop");
     clearInterval(this.gameInterval);
     this.bird.y = this.flappyCanvas.height / 2;
+    this.clearCanvas();
     this.drawBird();
   }
 }

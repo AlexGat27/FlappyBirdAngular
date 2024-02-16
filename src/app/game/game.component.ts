@@ -32,10 +32,10 @@ export class GameComponent implements AfterViewInit{
   StartStopGame(){
     if (this.isGameStart){
       this.gameService.StopGame();
-      this.isGameStart = true;
+      this.isGameStart = false;
     }else{
       this.gameService.StartGame();
-      this.isGameStart = false;
+      this.isGameStart = true;
     }
   }
 }
