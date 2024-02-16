@@ -34,9 +34,8 @@ export class CameraComponent implements AfterViewInit{
     }
   }
 
-  // private handleSwipe(event: HammerInput): void {
-  //   // Обработка жеста swipe на видео
-  //   console.log('Swipe detected on video!', event);
-  //   // Добавьте здесь вашу логику обработки жеста на видео
-  // }
+  HandleHand(): void {
+    const videoElement: HTMLVideoElement = this.videoElementRef.nativeElement;
+    
+  }
 }
