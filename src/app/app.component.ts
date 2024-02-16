@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `<div class="mainGame">
-                <app-game class="gameWindow"></app-game>
-                <app-camera class="cameraWindow"></app-camera>
+                <app-game class="window"></app-game>
+                <app-camera class="window"></app-camera>
               </div>`,
   styleUrl: './app.component.css'
 })
