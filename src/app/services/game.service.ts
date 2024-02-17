@@ -1,5 +1,6 @@
 import { AfterViewInit, ElementRef, HostListener, Injectable } from '@angular/core';
 import { ObstacleService } from './obstacle.service';
+import { CameraService } from './camera.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,10 @@ export class GameService{
   private ctx: CanvasRenderingContext2D;
   private bird: any;
   private gameInterval: any;
-  constructor(private obstacleService: ObstacleService) { }
+  private someInterval: any;
+  private isStartGame = false;
+  constructor(private obstacleService: ObstacleService,
+              private cameraService: CameraService) { }
 
   InitGameEnvironment(bird, canvas: HTMLCanvasElement): void {
     this.flappyCanvas = canvas;
@@ -31,22 +35,31 @@ export class GameService{
 
   private update(): void {
     this.clearCanvas();
-    this.bird.y += 1;
+    this.bird.y += 0.1;
     this.drawBird();
     this.obstacleService.UpdateObstacle(this.flappyCanvas);
   }
 
   StartGame(): void {
-    console.log("Start");
+    this.isStartGame = true;
     this.gameInterval = setInterval(() => {
       this.update();
-    }, 40);
+    }, 1);
+    this.someInterval = setInterval(() => {
+      this.PushBird();
+    }, 20);
   }
   StopGame(): void {
-    console.log("Stop");
+    this.isStartGame = false;
     clearInterval(this.gameInterval);
+    clearInterval(this.someInterval);
     this.bird.y = this.flappyCanvas.height / 2;
     this.clearCanvas();
     this.drawBird();
+  }
+  PushBird(): void{
+    if(this.isStartGame && this.cameraService.isthis){
+      this.bird.y -= 1;
+    }
   }
 }

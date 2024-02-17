@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CameraService } from '../services/camera.service';
 import { GameService } from '../services/game.service';
+import { HandsService } from '../services/hands.service';
 
 @Component({
   selector: 'app-camera',
@@ -9,13 +10,13 @@ import { GameService } from '../services/game.service';
 })
 export class CameraComponent implements AfterViewInit{
   @ViewChild("videoPlayback") videoElementRef: ElementRef;
+  @ViewChild("videoCanvas") videoCanvasRef: ElementRef;
   isCameraActive = false;
   isGameStart = false;
-  // private hammer: HammerManager;
-  constructor(private cameraService: CameraService,
-              private gameService: GameService){}
+  constructor(private cameraService: CameraService){}
 
   ngAfterViewInit(): void {
+    this.cameraService.InitializeVideoCanvas(this.videoElementRef, this.videoCanvasRef);
     this.OnOffCamera();
   }
 
@@ -24,18 +25,11 @@ export class CameraComponent implements AfterViewInit{
       this.cameraService.HideCamera();
       this.isCameraActive=false;
     }else{
-      const videoElement: HTMLVideoElement = this.videoElementRef.nativeElement;
-      this.cameraService.ShowCamera().then(stream => {
-        videoElement.srcObject = stream;
+      this.cameraService.ShowCamera().then(() => {
         this.isCameraActive=true;
       }).catch(er => {
         console.log(`Хьюстон у нас проблемы, ${er}`);
       })
     }
-  }
-
-  HandleHand(): void {
-    const videoElement: HTMLVideoElement = this.videoElementRef.nativeElement;
-    
   }
 }

@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
-import {Hands} from '@mediapipe/hands'
+import {FilesetResolver, HandLandmarker, HandLandmarkerResult} from '@mediapipe/tasks-vision'
 
 @Injectable({
   providedIn: 'root'
 })
 export class HandsService {
-  private hands: Hands;
+  private handLandMaker: HandLandmarker;
   constructor() { 
-    this.hands = new Hands({locateFile: (file: string) => {
-      return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
-    }});
+    this.initializeHandMaker();
   }
 
-  SendHandRequest(frame): Promise<any>{
-    return this.hands.send({image: frame})
-    .then(results => {
-      console.log(results);
-    })
-    .catch(error => {
-      console.error('Ошибка при обработке кадра:', error);
+  private async initializeHandMaker(){
+    const vision = await FilesetResolver.forVisionTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
+    );
+    this.handLandMaker = await HandLandmarker.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
+        delegate: "GPU"
+      },
+      runningMode: 'VIDEO',
+      numHands: 2
     });
+  }
+
+  ProcessVideo(video: HTMLVideoElement, startTimeMs: number): HandLandmarkerResult {
+    return this.handLandMaker.detectForVideo(video, startTimeMs);
   }
 }

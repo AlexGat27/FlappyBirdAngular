@@ -23,11 +23,11 @@ export class GameComponent implements AfterViewInit{
   }
 
   // Обработка клика мыши (жеста)
-  @HostListener('window:click', ['$event'])
-  private handleGesture(event: MouseEvent): void {
-    // Ваш код обработки жеста (например, поднимите птицу вверх)
-    this.bird.y -= 20;
-  }
+  // @HostListener('window:click', ['$event'])
+  // private handleGesture(event: MouseEvent): void {
+  //   // Ваш код обработки жеста (например, поднимите птицу вверх)
+  //   this.bird.y -= 20;
+  // }
 
   StartStopGame(){
     if (this.isGameStart){

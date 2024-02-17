@@ -46,7 +46,7 @@ export class ObstacleService {
   UpdateObstacle(canvas: HTMLCanvasElement){
     this.obstacles.forEach(obstacle => {
       obstacle.draw(canvas.getContext('2d'));
-      obstacle.x -= 2; // Смещение препятствий влево
+      obstacle.x -= 0.3; // Смещение препятствий влево
     });
   
     // Добавление нового препятствия с некоторой вероятностью
