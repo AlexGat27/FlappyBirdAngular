@@ -43,15 +43,42 @@ export class ObstacleService {
     this.obstacles.push(obstacle);
   }
 
-  UpdateObstacle(canvas: HTMLCanvasElement){
-    this.obstacles.forEach(obstacle => {
-      obstacle.draw(canvas.getContext('2d'));
-      obstacle.x -= 0.3; // Смещение препятствий влево
+  UpdateObstacle(canvas: HTMLCanvasElement, score: number){
+    this.obstacles.forEach((obstacle, index) => {
+      if (obstacle.x < -150){
+        this.obstacles.splice(index, 1);
+      }else{
+        obstacle.draw(canvas.getContext('2d'));
+        if (1 + score < 7){
+          obstacle.x -= 1 + score;
+        }else{obstacle.x -= 7}
+      }
     });
-  
-    // Добавление нового препятствия с некоторой вероятностью
-    if (Math.random() < 0.02) {
-      this.createObstacle(canvas.width, canvas.height);
+    if (score < 4){
+      if (Math.random() < 0.01 + score) {this.createObstacle(canvas.width, canvas.height);}
+    }else{
+      if (Math.random() < 0.4) {this.createObstacle(canvas.width, canvas.height);}
     }
+  }
+  CheckCollision(bird: any, canvasHeight: number): boolean{
+    try{
+      if (bird.y - bird.radius < 0 || bird.y + bird.radius > canvasHeight){ return true; }
+      this.obstacles.forEach(obstacle =>{
+        if (Math.abs(obstacle.x - bird.x) < obstacle.width - 15){
+          if ((obstacle.y === 0 && Math.abs(obstacle.height - bird.y) < bird.radius) || 
+          (obstacle.y === canvasHeight - obstacle.height && Math.abs(obstacle.y - bird.y) < bird.radius)){
+            throw new Error();
+          }
+        }
+      })
+      return false;
+    }catch(e){
+      return true;
+    }
+  }
+  ClearObstacles(){
+    this.obstacles.forEach((obstacle, index) => {
+        this.obstacles.splice(0, this.obstacles.length);
+    });
   }
 }

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { GameService } from '../services/game.service';
+import { FlappyService } from '../services/flappy/flappy.service';
+import { CameraService } from '../services/camera.service';
 
 @Component({
   selector: 'app-game',
@@ -10,7 +11,8 @@ export class GameComponent implements AfterViewInit{
   @ViewChild("flappyBirdCanvas") flappyCanvas: ElementRef;
   private bird: any;
   isGameStart = false;
-  constructor(private gameService: GameService){}
+  constructor(private flappyService: FlappyService,
+              private cameraService: CameraService){}
 
   ngAfterViewInit(): void {
     this.bird = {
@@ -19,23 +21,14 @@ export class GameComponent implements AfterViewInit{
       color: "red", 
       radius: 10
     };
-    this.gameService.InitGameEnvironment(this.bird, this.flappyCanvas.nativeElement);
+    this.flappyService.InitGameEnvironment(this.bird, this.flappyCanvas.nativeElement);
   }
 
-  // Обработка клика мыши (жеста)
-  // @HostListener('window:click', ['$event'])
-  // private handleGesture(event: MouseEvent): void {
-  //   // Ваш код обработки жеста (например, поднимите птицу вверх)
-  //   this.bird.y -= 20;
-  // }
-
   StartStopGame(){
-    if (this.isGameStart){
-      this.gameService.StopGame();
-      this.isGameStart = false;
+    if (!this.flappyService.isStartGame && this.cameraService.isCameraActive){
+      this.flappyService.StartGame();
     }else{
-      this.gameService.StartGame();
-      this.isGameStart = true;
+      this.flappyService.StopGame();
     }
   }
 }
