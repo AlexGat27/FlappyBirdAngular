@@ -1,18 +1,25 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FlappyService } from '../services/flappy/flappy.service';
 import { CameraService } from '../services/camera.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
-export class GameComponent implements AfterViewInit{
+export class GameComponent implements AfterViewInit, OnDestroy{
   @ViewChild("flappyBirdCanvas") flappyCanvas: ElementRef;
   private bird: any;
   isGameStart = false;
-  constructor(private flappyService: FlappyService,
-              private cameraService: CameraService){}
+  private subscriptionScore: Subscription;
+  @Input() score: number;
+
+  constructor(private flappyService: FlappyService, private cameraService: CameraService){
+    this.subscriptionScore = flappyService.score$.subscribe(scoreVal => {
+      this.score = scoreVal;
+    });
+  }
 
   ngAfterViewInit(): void {
     this.bird = {
@@ -30,5 +37,9 @@ export class GameComponent implements AfterViewInit{
     }else{
       this.flappyService.StopGame();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionScore.unsubscribe();
   }
 }

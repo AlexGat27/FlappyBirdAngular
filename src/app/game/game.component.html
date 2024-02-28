@@ -1,3 +1,6 @@
-<canvas #flappyBirdCanvas></canvas>
+<div class="flappyField">
+    <canvas #flappyBirdCanvas></canvas>
+    <span class="scoreOverlay">Score: {{score}}</span>
+</div>
 <button mat-raised-button color="accent" 
     (click)="StartStopGame()">Start/Stop Game</button>
