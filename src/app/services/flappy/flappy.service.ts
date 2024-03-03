@@ -22,7 +22,7 @@ export class FlappyService{
     this.ctx = canvas.getContext('2d');
     this.bird = bird;
   }
-  private drawBird(): void {
+  private async drawBird() {
     this.ctx.beginPath();
     this.ctx.arc(this.bird.x, this.bird.y, this.bird.radius, 0, Math.PI * 2);
     this.ctx.fillStyle = this.bird.color;
@@ -33,25 +33,28 @@ export class FlappyService{
     this.scoreSubject.next(score);
   }
   private gameProcessing(ctx: CanvasRenderingContext2D): void {
-    const update = () => {
+    const update = async () => {
       ctx.clearRect(0, 0, this.flappyCanvas.width, this.flappyCanvas.height);
       if (this.score < 100) {this.bird.y += 1 + this.score*0.01;}
       else{this.bird.y += 2}
-      this.pushBird();
-      this.drawBird();
-      this.obstacleService.UpdateObstacle(this.flappyCanvas, this.score);
-      if (this.obstacleService.CheckCollision(this.bird, this.flappyCanvas.height)) {this.StopGame()}
-      if (this.obstacleService.CheckScore(this.bird)) {
-        this.score += 1;
-        console.log(this.score)
-        this.updateScore(this.score);
-      }
-      this.isHandle = false;
-      if (this.isStartGame){requestAnimationFrame(update);}
+      await this.pushBird();
+      await this.drawBird();
+      await this.obstacleService.UpdateObstacle(this.flappyCanvas, this.score);
+      this.obstacleService.CheckCollision(this.bird, this.flappyCanvas.height)
+      .then(isCollide => {
+        if (isCollide) {this.StopGame();}
+        this.obstacleService.UpdateScore(this.bird, this.score).then(score => {
+          this.score = score;
+          this.updateScore(this.score);
+        })
+      }).finally(() => {
+        this.isHandle = false;
+        if (this.isStartGame){requestAnimationFrame(update);}
+      })
     }
     requestAnimationFrame(update);
   }
-  private pushBird(): void{
+  private async pushBird(){
     if(this.isStartGame && this.isHandle){
       if (this.score < 100) {this.bird.y -= 2 + this.score*0.01;}
       else{this.bird.y -= 3}
