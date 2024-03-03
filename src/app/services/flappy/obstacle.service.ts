@@ -53,27 +53,22 @@ export class ObstacleService {
   async UpdateObstacle(canvas: HTMLCanvasElement, score: number){
     if (this.obstacles.length === 0){this.createObstacle(canvas.width, canvas.height);}
     if (this.obstacles[this.obstacles.length - 1].x < canvas.width - 50){
-      if (0.05 + score*0.002 < 0.4){
-        if (Math.random() < 0.05 + score*0.002) {this.createObstacle(canvas.width, canvas.height);}
-      }else{
-        if (Math.random() < 0.4) {this.createObstacle(canvas.width, canvas.height);}
-      }
+      if (Math.random() < (0.05 + score*0.002 < 0.4 ? 0.05 + score*0.002 : 0.4)) {this.createObstacle(canvas.width, canvas.height);}
     }
     this.obstacles.forEach((obstacle, index) => {
       if (obstacle.x < -150){
         this.obstacles.splice(index, 1);
       }else{
         obstacle.draw(canvas.getContext('2d'));
-        if (1 + score*0.01 < 4){obstacle.x -= 1 + score*0.01;}
-        else{obstacle.x -= 4;}
+        obstacle.x -= (1 + score*0.01 < 4 ? 1 + score*0.01 : 4);
       }
     });
   }
-  async CheckCollision(bird: any, canvasHeight: number): Promise<boolean>{
+  async CheckCollision(bird: any, canvasHeight: number, score: number): Promise<boolean>{
     if (bird.y - bird.radius < 0 || bird.y + bird.radius > canvasHeight){ return true; }
     for (let i = 0; i < this.obstacles.length; i++) {
       const obstacle = this.obstacles[i];
-      if (Math.abs(bird.x - obstacle.x) < 15){
+      if (Math.abs(bird.x - obstacle.x) < (15 - score*0.01 > 5 ? 15 - score*0.01 : 15)){
         if ((obstacle.y === 0 && bird.y - obstacle.h < bird.radius-2) || 
           (obstacle.y === canvasHeight - obstacle.h && obstacle.y - bird.y < bird.radius-2)){return true;}
       }
@@ -83,9 +78,7 @@ export class ObstacleService {
   async UpdateScore(bird: any, score: number): Promise<number>{
     const obstaclesX = new Set<number>(this.obstacles.map(obj => obj.x));
     for (let x of obstaclesX){
-      if (0.5 + score*0.01 < 4){
-        if (Math.abs(bird.x - x) < 0.5 + score*0.01){return score + 1;}
-      }else if (Math.abs(bird.x - x) < 4){return score + 1;}
+      if (Math.abs(bird.x - x) < (0.5 + score*0.01 < 4 ? 0.5 + score*0.01 : 4)){return score + 1;}
     }
     return score;
   }

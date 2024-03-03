@@ -40,7 +40,7 @@ export class FlappyService{
       await this.pushBird();
       await this.drawBird();
       await this.obstacleService.UpdateObstacle(this.flappyCanvas, this.score);
-      this.obstacleService.CheckCollision(this.bird, this.flappyCanvas.height)
+      this.obstacleService.CheckCollision(this.bird, this.flappyCanvas.height, this.score)
       .then(isCollide => {
         if (isCollide) {this.StopGame();}
         this.obstacleService.UpdateScore(this.bird, this.score).then(score => {
