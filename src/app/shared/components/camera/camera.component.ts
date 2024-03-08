@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CameraService } from '../services/camera.service';
-import { FlappyService } from '../services/flappy/flappy.service';
-import { HandsService } from '../services/hands.service';
+import { CameraService } from '../../../core/services/camera.service';
 
 @Component({
   selector: 'app-camera',
@@ -11,7 +9,6 @@ import { HandsService } from '../services/hands.service';
 export class CameraComponent implements AfterViewInit{
   @ViewChild("videoPlayback") videoElementRef: ElementRef;
   @ViewChild("videoCanvas") videoCanvasRef: ElementRef;
-  isGameStart = false;
   constructor(private cameraService: CameraService){}
 
   ngAfterViewInit(): void {

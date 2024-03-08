@@ -1,6 +1,7 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { HandsService } from './hands.service';
-import { FlappyService } from './flappy/flappy.service';
+import { BehaviorSubject } from 'rxjs';
+import { HandLandmarkerResult } from '@mediapipe/tasks-vision';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +11,18 @@ export class CameraService{
   private videoElement: HTMLVideoElement;
   private videoCanvas: HTMLCanvasElement;
   isCameraActive: boolean;
-  constructor(private handService: HandsService,
-              private flappyService: FlappyService){}
+  isHandle: boolean = false;
+
+  private isCameraActiveSubject = new BehaviorSubject<boolean>(false);
+  isCameraActive$ = this.isCameraActiveSubject.asObservable();
+  private checkHandleSubject = new BehaviorSubject<HandLandmarkerResult>({} as HandLandmarkerResult);
+  checkHandle$ = this.checkHandleSubject.asObservable();
+
+  constructor(private handService: HandsService){}
 
   InitializeVideoCanvas(videoRef: ElementRef, canvasRef: ElementRef){
     this.videoElement = videoRef.nativeElement;
     this.videoCanvas = canvasRef.nativeElement;
-  }
-
-  private getHandlePos(){
-    const canvasCtx = this.videoCanvas.getContext('2d');
-    let startTimeMs = performance.now();
-    const results = this.handService.ProcessVideo(this.videoElement, startTimeMs);
-    canvasCtx.save();
-    if (results.landmarks.length > 0) {
-      this.drawSkeleton(results.landmarks, canvasCtx);
-      this.flappyService.CheckHandle(results.landmarks);
-    }
-    canvasCtx.restore();
   }
   
   ShowCamera(): void{
@@ -37,9 +32,10 @@ export class CameraService{
       this.videoElement.srcObject = stream;
     }).then(() => {
       this.videoElement.onloadedmetadata = () => {
-        this.videoCanvas.width = this.videoElement.videoWidth;
-        this.videoCanvas.height = this.videoElement.videoHeight;
+        this.videoCanvas.width = this.videoElement.videoWidth / 3;
+        this.videoCanvas.height = this.videoElement.videoHeight / 3;
         this.drawFrameVideo(this.videoCanvas.getContext('2d'));
+        this.isCameraActiveSubject.next(true);
       };
     })
   }
@@ -49,7 +45,19 @@ export class CameraService{
     }
     this.videoElement.onloadedmetadata = null;
     this.isCameraActive = false;
-    this.flappyService.StopGame();
+    this.isCameraActiveSubject.next(false);
+  }
+
+  private getHandlePos(){
+    const canvasCtx = this.videoCanvas.getContext('2d');
+    let startTimeMs = performance.now();
+    const results = this.handService.ProcessVideo(this.videoElement, startTimeMs);
+    canvasCtx.save();
+    if (results.landmarks.length > 0) {
+      this.drawSkeleton(results.landmarks, canvasCtx);
+      this.checkHandleSubject.next(results);
+    }
+    canvasCtx.restore();
   }
 
   private drawFrameVideo(canvasCtx: CanvasRenderingContext2D){
@@ -61,9 +69,7 @@ export class CameraService{
         return; 
       }
       canvasCtx.drawImage(this.videoElement, 0, 0, this.videoCanvas.width, this.videoCanvas.height);
-      if (this.flappyService.isStartGame){
-        this.getHandlePos();
-      }
+      if (this.isHandle){ this.getHandlePos(); }
       requestAnimationFrame(drawFrame);
     };
     this.isCameraActive = true;

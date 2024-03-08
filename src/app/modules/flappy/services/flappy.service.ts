@@ -1,23 +1,24 @@
 import { Injectable, Input, OnDestroy } from '@angular/core';
 import { ObstacleService } from './obstacle.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { CameraService } from '../../../core/services/camera.service';
+import { Bird } from '../../../core/models/flappybird.interfaces';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FlappyService{
   private flappyCanvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
-  private bird: any;
+  private bird: Bird;
   private isHandle = false;
-  score: number = 0;
-  private scoreSubject = new BehaviorSubject<number>(this.score);
-  score$ = this.scoreSubject.asObservable();
+  score = 0;
   isStartGame = false;
+  private scoreSubject = new BehaviorSubject<number>(this.score);
+  score$ = this.scoreSubject.asObservable(); 
 
-  constructor(private obstacleService: ObstacleService) { }
+  constructor(private obstacleService: ObstacleService,
+              private cameraService: CameraService) {}
 
-  InitGameEnvironment(bird, canvas: HTMLCanvasElement): void {
+  InitGameEnvironment(bird: Bird, canvas: HTMLCanvasElement): void {
     this.flappyCanvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.bird = bird;
@@ -63,6 +64,7 @@ export class FlappyService{
 
   StartGame(): void {
     this.isStartGame = true;
+    this.cameraService.isHandle = true;
     this.gameProcessing(this.ctx);
   }
   StopGame(): void {
@@ -73,6 +75,7 @@ export class FlappyService{
     this.obstacleService.ClearObstacles();
     this.score = 0;
     this.updateScore(this.score);
+    this.cameraService.isHandle = false;
     console.log("Game is stopped");
   }
   CheckHandle(landmarks: any){

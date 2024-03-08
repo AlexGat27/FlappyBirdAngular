@@ -1,32 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Bird, Obstacle } from '../../../core/models/flappybird.interfaces';
 
-class Obstacle {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  color: string;
-
-  constructor(x: number, y: number, w: number, h: number, color: string) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.color = color;
-  }
-
-  draw(ctx: CanvasRenderingContext2D): void {
-    ctx.beginPath();
-    ctx.rect(this.x, this.y, this.w, this.h);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.closePath();
-  }
-}
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ObstacleService {
   private obstacles: Obstacle[] = [];
 
@@ -64,7 +39,7 @@ export class ObstacleService {
       }
     });
   }
-  async CheckCollision(bird: any, canvasHeight: number, score: number): Promise<boolean>{
+  async CheckCollision(bird: Bird, canvasHeight: number, score: number): Promise<boolean>{
     if (bird.y - bird.radius < 0 || bird.y + bird.radius > canvasHeight){ return true; }
     for (let i = 0; i < this.obstacles.length; i++) {
       const obstacle = this.obstacles[i];
@@ -75,7 +50,7 @@ export class ObstacleService {
     }
     return false;
   }
-  async UpdateScore(bird: any, score: number): Promise<number>{
+  async UpdateScore(bird: Bird, score: number): Promise<number>{
     const obstaclesX = new Set<number>(this.obstacles.map(obj => obj.x));
     for (let x of obstaclesX){
       if (Math.abs(bird.x - x) < (0.5 + score*0.01 < 4 ? 0.5 + score*0.01 : 4)){return score + 1;}
