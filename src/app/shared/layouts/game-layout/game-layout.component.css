@@ -8,6 +8,15 @@ mat-sidenav{
     border-radius: 10px;
     padding: 16px;
     text-align: center;
+
+}
+mat-sidenav p{
+    padding: 15%;
+}
+mat-sidenav a{
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
 }
 mat-sidenav-content{
     height: 100%;
