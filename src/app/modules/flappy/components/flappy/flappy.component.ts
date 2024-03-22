@@ -24,12 +24,6 @@ export class FlappyComponent implements AfterViewInit, OnDestroy{
     this.subscriptionScore = flappyService.score$.subscribe(scoreVal => {
       this.score = scoreVal;
     });
-    this.checkHandleSubscribtion = cameraService.checkHandle$.subscribe(handLandmarks =>{
-      flappyService.CheckHandle(handLandmarks.landmarks);
-    })
-    this.isCameraActiveSubscribtion = cameraService.isCameraActive$.subscribe(isActive => {
-      if (isActive === false){flappyService.StopGame();}
-    })
   }
 
   ngAfterViewInit(): void {
@@ -43,6 +37,13 @@ export class FlappyComponent implements AfterViewInit, OnDestroy{
     this.flappyService.InitGameEnvironment(this.bird, this.flappyCanvas);
     this.clickListener = this.StartStopGame.bind(this);
     this.flappyCanvas.addEventListener('click', this.clickListener);
+
+    this.checkHandleSubscribtion = this.cameraService.checkHandle$.subscribe(handLandmarks =>{
+      if (handLandmarks.landmarks) {this.flappyService.CheckHandle(handLandmarks.landmarks)};
+    })
+    this.isCameraActiveSubscribtion = this.cameraService.isCameraActive$.subscribe(isActive => {
+      if (isActive === false){this.flappyService.StopGame();}
+    })
   }
 
   StartStopGame(){

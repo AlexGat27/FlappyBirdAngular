@@ -9,6 +9,8 @@ export class FlappyService{
   private flappyCanvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private bird: Bird;
+  private birdSprite: HTMLImageElement;
+  private isBirdSpriteLoad: boolean = false;
   private isHandle = false;
   score = 0;
   isStartGame = false;
@@ -22,22 +24,14 @@ export class FlappyService{
     this.flappyCanvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.bird = bird;
-  }
-  private async drawBird() {
-    this.ctx.beginPath();
-    this.ctx.arc(this.bird.x, this.bird.y, this.bird.radius, 0, Math.PI * 2);
-    this.ctx.fillStyle = this.bird.color;
-    this.ctx.fill();
-    this.ctx.closePath();
-  }
-  private updateScore(score: number){
-    this.scoreSubject.next(score);
+    this.birdSprite = new Image();
+    this.birdSprite.src = './assets/sprites/bird/free-icon-parrot-1871812.png';
+    this.birdSprite.onload = () => {this.isBirdSpriteLoad = true;}
   }
   private gameProcessing(ctx: CanvasRenderingContext2D): void {
     const update = async () => {
       ctx.clearRect(0, 0, this.flappyCanvas.width, this.flappyCanvas.height);
-      if (this.score < 100) {this.bird.y += 1 + this.score*0.01;}
-      else{this.bird.y += 2}
+      await this.downBird();
       await this.pushBird();
       await this.drawBird();
       await this.obstacleService.UpdateObstacle(this.flappyCanvas, this.score);
@@ -49,23 +43,40 @@ export class FlappyService{
           this.updateScore(this.score);
         })
       }).finally(() => {
-        this.isHandle = false;
-        if (this.isStartGame){requestAnimationFrame(update);}
+        if (this.isStartGame){setTimeout(update, 15);}
       })
     }
-    requestAnimationFrame(update);
+    setTimeout(update, 15);
+  }
+  private async drawBird() {
+    this.ctx.beginPath();
+    if (this.isBirdSpriteLoad) {this.ctx.drawImage(this.birdSprite, this.bird.x - this.bird.radius/2,
+     this.bird.y - this.bird.radius/2, this.bird.radius+5, this.bird.radius+5);}
+    else {this.ctx.arc(this.bird.x, this.bird.y, this.bird.radius, 0, Math.PI * 2)};
+    this.ctx.fillStyle = this.bird.color;
+    this.ctx.fill();
+    this.ctx.closePath();
+  }
+  private updateScore(score: number){
+    this.scoreSubject.next(score);
   }
   private async pushBird(){
     if(this.isStartGame && this.isHandle){
-      if (this.score < 100) {this.bird.y -= 2 + this.score*0.01;}
-      else{this.bird.y -= 3}
+      if (1 + this.score*0.001 < 1.5) {this.bird.y -= 1 + this.score*0.001;}
+      else{this.bird.y -= 1.5}
+    }
+  }
+  private async downBird(){
+    if(this.isStartGame && !this.isHandle){
+      if (1 + this.score*0.001 < 1.5) {this.bird.y += 1 + this.score*0.001;}
+      else{this.bird.y += 1.5}
     }
   }
 
   StartGame(): void {
+    this.gameProcessing(this.ctx);
     this.isStartGame = true;
     this.cameraService.isHandle = true;
-    this.gameProcessing(this.ctx);
   }
   StopGame(): void {
     this.isStartGame = false;
@@ -83,6 +94,6 @@ export class FlappyService{
     let dy = landmarks[0][4].y - landmarks[0][8].y
     if (Math.sqrt((dx * dx) + (dy*dy)) < 0.05){
       this.isHandle = true;
-    }
+    }else {this.isHandle = false;}
   }
 }
