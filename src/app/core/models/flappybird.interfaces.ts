@@ -2,7 +2,8 @@ export interface Bird {
     x: number;
     y: number;
     color: string, 
-    radius: number
+    radius: number,
+    skinPath: string
 }
 
 export class Obstacle {

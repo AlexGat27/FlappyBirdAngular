@@ -32,7 +32,8 @@ export class FlappyComponent implements AfterViewInit, OnDestroy{
       x: this.flappyCanvas.width / 2,
       y: this.flappyCanvas.height / 2,
       color: "red", 
-      radius: 10
+      radius: 10,
+      skinPath: "assets/sprites/bird/15b17a7beb2911d.png"
     };
     this.flappyService.InitGameEnvironment(this.bird, this.flappyCanvas);
     this.clickListener = this.StartStopGame.bind(this);

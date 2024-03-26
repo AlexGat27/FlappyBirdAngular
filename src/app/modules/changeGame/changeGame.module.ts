@@ -1,24 +1,25 @@
 import { NgModule } from '@angular/core';
+import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule} from '@angular/material/button';
-
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { HomepageComponent } from './components/homepage/homepage.component';
+import { ChangeGameComponent } from './components/changeGame.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
-    {path: "", component: HomepageComponent}
+  {path: "", component: ChangeGameComponent}
 ]
 
 @NgModule({
   declarations: [
-    HomepageComponent
+    ChangeGameComponent
   ],
   imports: [
     CommonModule,
-    MatButtonModule,MatSidenavModule,
+    MatButtonModule,
+    HttpClientModule,
     RouterModule.forChild(routes)
   ],
   providers: [],
 })
-export class HomeModule { }
+export class ChangeGameModule { }

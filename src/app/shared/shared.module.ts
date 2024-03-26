@@ -8,11 +8,21 @@ import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
-    {
-        path: '',
-        component: GameLayoutComponent,
-        loadChildren: () => import('../modules/flappy/flappy.module').then(m => m.FlappyModule)
-    }
+  {
+    path: 'home',
+    component: GameLayoutComponent,
+    loadChildren: () => import('../modules/home/home.module').then(m => m.HomeModule)
+  },
+  {
+    path: 'game',
+    component: GameLayoutComponent,
+    loadChildren: () => import('../modules/game/game.module').then(m => m.GameModule)
+  },
+  {
+    path: 'changeGame',
+    component: GameLayoutComponent,
+    loadChildren: () => import('../modules/changeGame/changeGame.module').then(m => m.ChangeGameModule)
+  }
 ]
 
 @NgModule({

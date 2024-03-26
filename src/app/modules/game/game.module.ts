@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 const routes: Routes = [
-    {path: "flappy", component: FlappyComponent}
+    {path: "", component: FlappyComponent}
 ]
 
 @NgModule({
@@ -23,4 +23,4 @@ const routes: Routes = [
   ],
   providers: [FlappyService, ObstacleService],
 })
-export class FlappyModule { }
+export class GameModule { }

@@ -25,7 +25,7 @@ export class FlappyService{
     this.ctx = canvas.getContext('2d');
     this.bird = bird;
     this.birdSprite = new Image();
-    this.birdSprite.src = './assets/sprites/bird/free-icon-parrot-1871812.png';
+    this.birdSprite.src = bird.skinPath;
     this.birdSprite.onload = () => {this.isBirdSpriteLoad = true;}
   }
   private gameProcessing(ctx: CanvasRenderingContext2D): void {
@@ -43,7 +43,7 @@ export class FlappyService{
           this.updateScore(this.score);
         })
       }).finally(() => {
-        if (this.isStartGame){setTimeout(update, 15);}
+        if (this.isStartGame){setTimeout(update,  1);}
       })
     }
     setTimeout(update, 15);

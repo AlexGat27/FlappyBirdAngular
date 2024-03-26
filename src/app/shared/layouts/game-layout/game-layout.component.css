@@ -37,7 +37,7 @@ mat-sidenav-content{
 mat-sidenav-container {
     height: 95%;
   }
-.game{
+.contentArea{
     width: 100%;
     height: 100%;
 }
@@ -45,4 +45,5 @@ app-camera{
     position: absolute;
     bottom: 5%;
     left: 2%;
+    z-index: 1001;
 }
