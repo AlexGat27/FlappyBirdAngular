@@ -1,6 +1,6 @@
 import { HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Game } from '../interfaces/gameModel.interface';
+import { GameModel } from '../interfaces/gameModel.interface';
 import { Observable, catchError, tap } from 'rxjs';
 
 @Injectable({
@@ -8,12 +8,12 @@ import { Observable, catchError, tap } from 'rxjs';
 })
 export class GameService {
   currentGameIndex: number = 0;
-  games: Game[];
+  games: GameModel[];
 
   constructor(private http: HttpClient){}
 
-  GetGames(): Observable<Game[]>{
-    return this.http.get<Game[]>("/api/v1/game/getGames").pipe(
+  GetGames(): Observable<GameModel[]>{
+    return this.http.get<GameModel[]>("/api/v1/game/getGames").pipe(
       tap(games => {
         this.games = games;
       })
