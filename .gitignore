@@ -8,6 +8,7 @@
 
 # Node
 /node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -29,7 +30,8 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+/.angular/cache/
+.angular/cache/
 .sass-cache/
 /connect.lock
 /coverage
@@ -40,3 +42,14 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+#Media files of python
+Media/
+*.jpg
+
+#Environment python
+.venv/
+*.pyc
+.env
+
+*.pt

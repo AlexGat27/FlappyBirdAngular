@@ -1,0 +1,9 @@
+<div class="homeArea">
+    <div class="gameUnit" *ngFor="let game of games">
+        <img src="../../../../../assets/sprites/preview/{{game.imageName}}">
+        <h2>{{ game.name }}</h2>
+        <button *ngIf="!game.changed" mat-raised-button
+         color="primary" (click)="ChangeGame(game.id - 1)">Выбрать игру</button>
+        <button disabled *ngIf="game.changed" mat-raised-button color="secondary">Игра выбрана</button>
+    </div>
+</div>
