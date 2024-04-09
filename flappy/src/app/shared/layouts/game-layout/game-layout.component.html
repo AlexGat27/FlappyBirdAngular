@@ -1,0 +1,15 @@
+<mat-sidenav-container>
+    <mat-sidenav mode="side" opened class="mat-elevation-z8">
+        <p><a routerLink="/home">Home</a></p>
+        <p><a routerLink="/game/gameMiddle">Play Game</a></p>
+        <p><a routerLink="/changeGame">Change Game</a></p>
+        <p><a routerLink="">Рандомная кнопка</a></p>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="content mat-elevation-z8">
+            <div class="contentArea">
+                <router-outlet></router-outlet>
+            </div>
+        </div>   
+    </mat-sidenav-content>
+</mat-sidenav-container>

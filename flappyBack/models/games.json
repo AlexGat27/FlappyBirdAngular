@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Flappy Bird",
+    "imageName": "f5d5f703b90c67bed9bb830fd40d94ae.jpg",
+    "route": "flappy"
+  },
+  {
+    "id": 2,
+    "name": "Arkanoid 2 Players",
+    "imageName": "amake_games.ru__ld_7_73812570.png",
+    "route": "arkanoid2players"
+  },
+  {
+    "id": 3,
+    "name": "Tetris",
+    "imageName": "60.jpeg",
+    "route": "tetris"
+  }
+]

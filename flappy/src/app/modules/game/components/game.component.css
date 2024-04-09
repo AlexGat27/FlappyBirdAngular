@@ -1,0 +1,6 @@
+app-camera{
+    position: absolute;
+    bottom: 5%;
+    left: 2%;
+    z-index: 1001;
+}

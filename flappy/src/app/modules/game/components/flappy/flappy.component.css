@@ -1,0 +1,24 @@
+.flappyField{
+    width: 100%;
+    height: 100%;
+}
+canvas{
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(139, 239, 248);
+}
+button{
+    margin: 1%;
+    position: absolute;
+    bottom: 50%;
+    left:50%;
+    transform: translateX(-50%);
+}
+.scoreOverlay{
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    font-size: 20px;
+    color: black;
+}
