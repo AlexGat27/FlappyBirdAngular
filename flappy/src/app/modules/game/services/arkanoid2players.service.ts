@@ -85,7 +85,7 @@ export class Arkanoid2playersService implements IGameService{
       for (let i = 1; i < 5; i++) {
         let dx = mark[0].x - mark[i * 4].x;
         let dy = mark[0].y - mark[i * 4].y;
-        if (Math.sqrt((dx * dx) + (dy*dy)) < 0.3 === false){
+        if (Math.sqrt((dx * dx) + (dy*dy)) < 0.25 === false){
           isHandle = false;
           break;
         }

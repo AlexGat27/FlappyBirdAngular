@@ -55,7 +55,7 @@ export class Arkanoid2playersComponent {
   }
 
   ngOnDestroy(): void {
-    this.subscriptionScore.unsubscribe();
+    // this.subscriptionScore.unsubscribe();
     this.isCameraActiveSubscribtion.unsubscribe();
     this.checkHandleSubscribtion.unsubscribe();
     this.arkanoidCanvas.removeEventListener('click', this.StartStopGame);
