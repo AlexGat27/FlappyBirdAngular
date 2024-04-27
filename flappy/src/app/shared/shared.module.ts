@@ -5,29 +5,42 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { GameLayoutComponent } from './layouts/game-layout/game-layout.component';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { GameGuardGuard } from '../core/guards/game-guard.guard';
+import { AuthGuard } from '../core/guards/auth.guard';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout/auth-layout.component';
 
 const routes: Routes = [
   {
     path: 'home',
     component: GameLayoutComponent,
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     loadChildren: () => import('../modules/home/home.module').then(m => m.HomeModule)
   },
   {
     path: 'game',
     component: GameLayoutComponent,
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     loadChildren: () => import('../modules/game/game.module').then(m => m.GameModule),
   },
   {
     path: 'changeGame',
     component: GameLayoutComponent,
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     loadChildren: () => import('../modules/changeGame/changeGame.module').then(m => m.ChangeGameModule)
+  },
+  {
+    path: 'auth',
+    component: AuthLayoutComponent,
+    loadChildren: () => import('../modules/auth/auth.module').then(m => m.AuthModule)
   }
 ]
 
 @NgModule({
   declarations: [
-    GameLayoutComponent
+    GameLayoutComponent,
+    AuthLayoutComponent
   ],
   imports: [
     CommonModule,

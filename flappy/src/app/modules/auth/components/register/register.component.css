@@ -1,0 +1,17 @@
+.authField{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.authField form{
+    width: 50%;
+}
+form mat-form-field, form button{
+    width: 100%;
+    margin-bottom: 3%;
+}
+.error-text{
+    color: red;
+}

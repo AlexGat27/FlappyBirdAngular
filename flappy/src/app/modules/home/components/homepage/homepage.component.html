@@ -1,1 +1,25 @@
-<p>homepage works!</p>
+<div class="homepage">
+    <div class="avatar">
+        <img src="../../../../../assets/avatars/ava1.png" alt="Аватар">
+    </div>
+    <div class="description">
+        <h2>{{user.username}}</h2>
+        <mat-list class="records">
+            <mat-list-item>
+                <mat-icon matListItemIcon>filter_1</mat-icon>
+                <p matListItemLine>Flappy Bird</p>
+                <p matListItemLine>{{user.flappyScore}}</p>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-icon matListItemIcon>filter_2</mat-icon>
+                <p matListItemLine>Arkanoid 2 Players</p>
+                <p matListItemLine>{{user.arkanoidScore}}</p>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-icon matListItemIcon>filter_3</mat-icon>
+                <p matListItemLine>Tetris</p>
+                <p matListItemLine>{{user.tetrisScore}}</p>
+            </mat-list-item>
+        </mat-list>
+    </div>
+</div>
