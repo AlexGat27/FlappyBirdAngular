@@ -10,7 +10,7 @@
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Пароль</mat-label>
-                <input matInput formControlName="password">
+                <input type="password" matInput formControlName="password">
                 <mat-hint class="error-text"
                 *ngIf="form.get('password').invalid && form.get('password').touched">
                     <mat-hint *ngIf="form.get('password').errors['minlength']">Пароль должен быть больше 8 символов</mat-hint>

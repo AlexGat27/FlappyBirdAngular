@@ -23,9 +23,9 @@ export class Arkanoid2playersComponent {
   @Input() score: number;
 
   constructor(private arkanoidService: Arkanoid2playersService, private cameraService: CameraService){
-    // this.subscriptionScore = arkanoidService.score$.subscribe(scoreVal => {
-    //   this.score = scoreVal;
-    // });
+    this.subscriptionScore = arkanoidService.score$.subscribe(scoreVal => {
+      this.score = scoreVal;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -55,7 +55,7 @@ export class Arkanoid2playersComponent {
   }
 
   ngOnDestroy(): void {
-    // this.subscriptionScore.unsubscribe();
+    this.subscriptionScore.unsubscribe();
     this.isCameraActiveSubscribtion.unsubscribe();
     this.checkHandleSubscribtion.unsubscribe();
     this.arkanoidCanvas.removeEventListener('click', this.StartStopGame);

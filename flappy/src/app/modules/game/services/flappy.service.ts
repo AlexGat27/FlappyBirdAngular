@@ -4,6 +4,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { CameraService } from '../../../core/services/camera.service';
 import { Bird } from '../../../core/interfaces/flappyModel.interfaces';
 import { IGameService } from '../../../core/interfaces/gameService.interface';
+import { GameService } from '../../../core/services/game.service';
 
 @Injectable()
 export class FlappyService implements IGameService{
@@ -19,7 +20,8 @@ export class FlappyService implements IGameService{
   score$ = this.scoreSubject.asObservable(); 
 
   constructor(private obstacleService: ObstacleService,
-              private cameraService: CameraService) {}
+              private cameraService: CameraService,
+              private gameService: GameService) {}
 
   InitGameEnvironment(canvas: HTMLCanvasElement, bird: Bird): void {
     this.flappyCanvas = canvas;
@@ -85,6 +87,7 @@ export class FlappyService implements IGameService{
     this.ctx.clearRect(0, 0, this.flappyCanvas.width, this.flappyCanvas.height);
     this.drawBird();
     this.obstacleService.ClearObstacles();
+    this.gameService.SetUserRecord("flappyScore", this.score);
     this.score = 0;
     this.updateScore(this.score);
     this.cameraService.isHandle = false;

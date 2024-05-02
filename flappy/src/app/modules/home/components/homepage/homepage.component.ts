@@ -19,12 +19,8 @@ export class HomepageComponent implements OnInit{
 
   ngOnInit(): void {
     this.authService.getUser().subscribe(
-      user => {
-        console.log(user)
-        this.user.username = user.username;
-        this.user.flappyScore = user.flappyScore;
-        this.user.arkanoidScore = user.arkanoidScore;
-        this.user.tetrisScore = user.tetrisScore;
+      userdata => {
+        this.user = userdata;
       }
     )
   }

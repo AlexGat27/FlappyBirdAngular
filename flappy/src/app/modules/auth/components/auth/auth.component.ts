@@ -21,6 +21,7 @@ export class AuthComponent {
       password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
     })
     this.authError = false;
+    this.authService.logout();
   }
   ngOnDestroy(): void {
     if (this.aSub){

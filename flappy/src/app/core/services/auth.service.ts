@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, catchError, map, of, tap, throwError } from 'rxjs';
@@ -9,6 +9,7 @@ import { User } from '../interfaces/userModel.interface';
 })
 export class AuthService {
   private token: string;
+  private user: User | null = null;
   public authenticated = signal(this.getToken() !== null);
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
@@ -18,13 +19,12 @@ export class AuthService {
   }
 
   login(userValue): Observable<{token: string}> {
-    console.log(userValue)
     return this.http.post<any>("/api/v1/auth/login", userValue)
     .pipe(
         tap(data => {
           this.setToken(data.token)
-            localStorage.setItem("auth-token", data.token);
-            this.router.navigate(["home"]);
+          localStorage.setItem("auth-token", data.token);
+          this.router.navigate(["home"]);
         }),//
         catchError(er => {
             console.log(er);
@@ -48,13 +48,16 @@ export class AuthService {
   }
 
   getUser(): Observable<User>{
+    if (this.user !== null) { return of(this.user);}
     return this.http.get<User>("/api/v1/auth/getUser").pipe(
       map(userdata => {
         if (userdata === undefined || userdata === null) {
             this.logout();
             throw new Error('Пользователь не найден');
         }
-        return userdata;
+        this.user = userdata;
+        console.log(userdata)
+        return this.user;
       }),
       catchError(err => {
         console.log(err);
@@ -78,6 +81,7 @@ export class AuthService {
   logout() {
     this.setToken(null);
     localStorage.clear();
+    this.user = null;
     this.router.navigate(["auth", "login"]);
   }
 }

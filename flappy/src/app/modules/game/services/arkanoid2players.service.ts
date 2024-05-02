@@ -4,20 +4,21 @@ import { BehaviorSubject } from 'rxjs';
 import { CameraService } from '../../../core/services/camera.service';
 import { Ball } from '../../../core/interfaces/arkanoidModels.interface';
 import { PlayerBlock } from '../../../core/interfaces/arkanoidModels.interface';
+import { GameService } from '../../../core/services/game.service';
 
 @Injectable()
 export class Arkanoid2playersService implements IGameService{
   private arkanoidCanvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
-  score = 0;
+  private score = 0;
   isStartGame = false;
   ball: Ball;
   leftBlock: PlayerBlock;
   rightBlock: PlayerBlock;
-  // private scoreSubject = new BehaviorSubject<number>(this.score);
-  // score$ = this.scoreSubject.asObservable(); 
+  private scoreSubject = new BehaviorSubject<number>(this.score);
+  score$ = this.scoreSubject.asObservable(); 
 
-  constructor(private cameraService: CameraService) {}
+  constructor(private cameraService: CameraService, private gameService: GameService) {}
 
   InitGameEnvironment(canvas: HTMLCanvasElement, ball: Ball, leftBlock: PlayerBlock, rightBlock: PlayerBlock): void {
     this.arkanoidCanvas = canvas;
@@ -37,9 +38,9 @@ export class Arkanoid2playersService implements IGameService{
     }
     setTimeout(update, 15);
   }
-  // private updateScore(score: number){
-  //   this.scoreSubject.next(score);
-  // }
+  private updateScore(score: number){
+    this.scoreSubject.next(score);
+  }
   private moveBall(){
     if (this.ball.x > this.arkanoidCanvas.width - this.ball.radius || 
       this.ball.x < this.ball.radius) {
@@ -52,6 +53,8 @@ export class Arkanoid2playersService implements IGameService{
       this.ball.y + this.ball.radius > this.leftBlock.y - this.leftBlock.h / 2 &&
       this.ball.y - this.ball.radius < this.leftBlock.y + this.leftBlock.h / 2) {
       this.ball.speedX = -this.ball.speedX; 
+      this.score += 1;
+      this.updateScore(this.score);
     }
     if (this.ball.y + this.ball.speedY > this.arkanoidCanvas.height - this.ball.radius || this.ball.y + this.ball.speedY < this.ball.radius) {
       this.ball.speedY = -this.ball.speedY; 
@@ -68,14 +71,15 @@ export class Arkanoid2playersService implements IGameService{
   StopGame(): void {
     this.isStartGame = false;
     this.ctx.clearRect(0, 0, this.arkanoidCanvas.width, this.arkanoidCanvas.height);
+    this.gameService.SetUserRecord("arkanoidScore", this.score);
     this.score = 0;
+    this.updateScore(this.score);
     this.ball.spawn(this.arkanoidCanvas);
     this.leftBlock.spawn(this.arkanoidCanvas, 30);
     this.rightBlock.spawn(this.arkanoidCanvas, this.arkanoidCanvas.width - 30);
     this.ball.draw(this.ctx);
     this.leftBlock.draw(this.ctx);
     this.rightBlock.draw(this.ctx);
-    // this.updateScore(this.score);
     this.cameraService.isHandle = false;
     console.log("game stop")
   }
