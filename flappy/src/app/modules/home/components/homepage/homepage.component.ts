@@ -12,7 +12,7 @@ export class HomepageComponent implements OnInit{
     username: '',
     flappyScore: 0,
     arkanoidScore: 0,
-    tetrisScore: 0
+    nupogodiScore: 0
   };
 
   constructor(private authService: AuthService){}

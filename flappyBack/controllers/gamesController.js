@@ -16,12 +16,13 @@ class GameController{
         });
     }
 
-    async saveRecord(req, res){
+    saveRecord(req, res){
         const {scoreName, value} = req.body;
         const jwtHeader = req.headers["authorisation"];
         const token = jwtHeader && jwtHeader.split(' ')[1];
         const data = jwt.verify(token, keys.jwt);
-        await userModel.setRecord(scoreName, value, data.id).then(message => {
+        userModel.setRecord(scoreName, value, data.id).then(message => {
+            console.log(message)
             res.json({message: message})
         }).catch(er => {
             console.log(er);

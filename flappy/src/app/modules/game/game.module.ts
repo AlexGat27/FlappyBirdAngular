@@ -13,6 +13,9 @@ import { TetrisComponent } from './components/tetris/tetris.component';
 import { Arkanoid2playersComponent } from './components/arkanoid2players/arkanoid2players.component';
 import { GameGuardGuard } from '../../core/guards/game-guard.guard';
 import { Arkanoid2playersService } from './services/arkanoid2players.service';
+import { NupogodiComponent } from './components/nupogodi/nupogodi.component';
+import { NupogodiService } from './services/nupogodi.service';
+import { WolfEggsService } from './services/wolfeggs.service';
 
 const routes: Routes = [
   {path: 'gameMiddle', canActivate: [GameGuardGuard], component:GameComponent},
@@ -20,18 +23,22 @@ const routes: Routes = [
     {path: "flappy", component: FlappyComponent},
     {path: "arkanoid2players", component: Arkanoid2playersComponent},
     {path: "tetris", component: TetrisComponent},
+    {path: "nupogodi", component: NupogodiComponent}
   ]}
 ]
 
 @NgModule({
   declarations: [
-    FlappyComponent, CameraComponent, GameComponent, TetrisComponent, Arkanoid2playersComponent
+    FlappyComponent, CameraComponent, GameComponent, TetrisComponent, Arkanoid2playersComponent, NupogodiComponent
   ],
   imports: [
     CommonModule,
     MatButtonModule,MatSidenavModule,
     RouterModule.forChild(routes)
   ],
-  providers: [FlappyService, ObstacleService, Arkanoid2playersService],
+  providers: [
+    FlappyService, ObstacleService, Arkanoid2playersService, 
+    NupogodiService, WolfEggsService
+  ],
 })
 export class GameModule { }

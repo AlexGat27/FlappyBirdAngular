@@ -16,7 +16,7 @@ class UserModel {
             password TEXT NOT NULL,
             flappyScore INTEGER DEFAULT 0,
             arkanoidScore INTEGER DEFAULT 0,
-            tetrisScore INTEGER DEFAULT 0
+            nupogodiScore INTEGER DEFAULT 0
         )`);
     }
 
@@ -61,7 +61,7 @@ class UserModel {
     }
     async getUserById(id) {
         return new Promise((resolve, reject) => {
-            this.db.get('SELECT username, flappyScore, arkanoidScore, tetrisScore FROM users WHERE id == ?',
+            this.db.get('SELECT username, flappyScore, arkanoidScore, nupogodiScore FROM users WHERE id == ?',
              [id], function(err, rows) {
                 if (err) {
                     reject(err);
@@ -70,6 +70,14 @@ class UserModel {
                 }
             });
         });
+    }
+    async setRecord(scoreName, value, id){
+        return new Promise((resolve, reject) => {
+            this.db.run(`UPDATE users SET '${scoreName}' = '${value}' WHERE id = '${id}'`, (er) =>{
+                if (er) {reject(er)}
+                else { resolve("Рекорд успешно сохранен") }
+            })
+        })
     }
 
 }
