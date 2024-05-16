@@ -56,13 +56,17 @@ export class CameraService{
   private getHandlePos(){
     const canvasCtx = this.videoCanvas.getContext('2d');
     let startTimeMs = performance.now();
-    const results = this.handService.ProcessVideo(this.videoElement, startTimeMs);
-    canvasCtx.save();
-    if (results.landmarks.length > 0) {
-      this.drawSkeleton(results.landmarks, canvasCtx);
-      this.checkHandleSubject.next(results);
-    }
-    canvasCtx.restore();
+    this.handService.ProcessVideo(this.videoElement, startTimeMs)
+    .then(results => {
+      canvasCtx.save();
+      if (results.landmarks.length > 0) {
+        this.drawSkeleton(results.landmarks, canvasCtx);
+        this.checkHandleSubject.next(results);
+      }
+      canvasCtx.restore();
+    }).catch(er => {
+      console.log(er);
+    });
   }
 
   private drawFrameVideo(canvasCtx: CanvasRenderingContext2D){

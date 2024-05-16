@@ -46,10 +46,10 @@ export class Arkanoid2playersService implements IGameService{
       this.ball.x < this.ball.radius) {
       this.StopGame();
     }
-    if (Math.abs(this.ball.x - this.rightBlock.x) < this.ball.radius + this.rightBlock.w / 2 &&
+    if (Math.abs(this.ball.x - this.rightBlock.x) < this.ball.radius + this.rightBlock.w / 2 + this.ball.speedX &&
       this.ball.y + this.ball.radius > this.rightBlock.y - this.rightBlock.h / 2  &&
       this.ball.y - this.ball.radius < this.rightBlock.y + this.rightBlock.h / 2 || 
-      Math.abs(this.ball.x - this.leftBlock.x) < this.ball.radius + this.leftBlock.w / 2 &&
+      Math.abs(this.ball.x - this.leftBlock.x) < this.ball.radius + this.leftBlock.w / 2 - this.ball.speedX &&
       this.ball.y + this.ball.radius > this.leftBlock.y - this.leftBlock.h / 2 &&
       this.ball.y - this.ball.radius < this.leftBlock.y + this.leftBlock.h / 2) {
       this.ball.speedX = -this.ball.speedX; 
@@ -59,8 +59,8 @@ export class Arkanoid2playersService implements IGameService{
     if (this.ball.y + this.ball.speedY > this.arkanoidCanvas.height - this.ball.radius || this.ball.y + this.ball.speedY < this.ball.radius) {
       this.ball.speedY = -this.ball.speedY; 
     }
-    this.ball.x += this.ball.speedX;
-    this.ball.y += this.ball.speedY;
+    this.ball.x += this.ball.speedX * (1 + this.score*0.1);
+    this.ball.y += this.ball.speedY * (1 + this.score*0.1);
   }
 
   StartGame(): void {
