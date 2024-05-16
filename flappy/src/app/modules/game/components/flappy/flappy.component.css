@@ -21,4 +21,8 @@ button{
     right: 5%;
     font-size: 20px;
     color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 18%;
 }

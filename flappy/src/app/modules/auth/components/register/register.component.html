@@ -1,0 +1,28 @@
+
+<div class="authField">
+    <form [formGroup]="form" (ngSubmit)="OnSubmit()">
+            <mat-form-field appearance="outline">
+                <mat-label>Логин</mat-label>
+                <input matInput formControlName="login">
+                <mat-hint class="error-text"
+                *ngIf="form.get('login').invalid && form.get('login').touched">
+                Поле не может быть пустым</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Пароль</mat-label>
+                <input type="password" matInput formControlName="password">
+                <mat-hint class="error-text"
+                *ngIf="form.get('password').invalid && form.get('password').touched">
+                    <mat-hint *ngIf="form.get('password').errors['minlength']">Пароль должен быть больше 8 символов</mat-hint>
+                    <mat-hint *ngIf="form.get('password').errors['required']">Поле не может быть пустым</mat-hint>
+                </mat-hint>
+            </mat-form-field>
+        <button type="submit" mat-raised-button color="primary" 
+        [disabled]="form.get('password').invalid || form.get('login').invalid">
+        Зарегистрироваться</button>
+        <button mat-raised-button color="secondary" (click)="gotoLoginPage()">
+            Уже есть аккаунт?</button>
+        <span class="error-text" *ngIf="registerError">Ошибка регистрации</span>
+    </form>
+</div>

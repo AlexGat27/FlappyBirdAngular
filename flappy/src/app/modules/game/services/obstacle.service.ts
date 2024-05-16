@@ -35,7 +35,7 @@ export class ObstacleService {
         this.obstacles.splice(index, 1);
       }else{
         obstacle.draw(canvas.getContext('2d'));
-        obstacle.x -= (1 + score*0.01 < 4 ? 1 + score*0.01 : 4);
+        obstacle.x -= (2 + score*0.01 < 4 ? 2 + score*0.01 : 4);
       }
     });
   }
@@ -43,17 +43,18 @@ export class ObstacleService {
     if (bird.y - bird.radius < 0 || bird.y + bird.radius > canvasHeight){ return true; }
     for (let i = 0; i < this.obstacles.length; i++) {
       const obstacle = this.obstacles[i];
-      if (Math.abs(bird.x - obstacle.x) < (15 - score*0.01 > 5 ? 15 - score*0.01 : 15)){
-        if ((obstacle.y === 0 && bird.y - obstacle.h < bird.radius-2) || 
-          (obstacle.y === canvasHeight - obstacle.h && obstacle.y - bird.y < bird.radius-2)){return true;}
-      }
+        const obstacleTopY = obstacle.y;
+        const obstacleBottomY = obstacle.y + obstacle.h;
+        const isWithinObstacleX = bird.x + bird.radius / 2 > obstacle.x && bird.x - bird.radius / 2 < obstacle.x + obstacle.w;
+        const isWithinObstacleY = bird.y - bird.radius / 2 < obstacleBottomY && bird.y + bird.radius / 2 > obstacleTopY;
+        if (isWithinObstacleX && isWithinObstacleY) {return true;}
     }
     return false;
   }
   async UpdateScore(bird: Bird, score: number): Promise<number>{
     const obstaclesX = new Set<number>(this.obstacles.map(obj => obj.x));
     for (let x of obstaclesX){
-      if (Math.abs(bird.x - x) < (0.5 + score*0.01 < 4 ? 0.5 + score*0.01 : 4)){return score + 1;}
+      if (Math.abs(bird.x - x) < (1 + score*0.01 < 4 ? 1 + score*0.01 : 4)){return score + 1;}
     }
     return score;
   }

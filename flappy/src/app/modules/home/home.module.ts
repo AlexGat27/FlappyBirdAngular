@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule} from '@angular/material/button';
 
+import { MatButtonModule} from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+
+import {MatListModule} from '@angular/material/list'
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { HomepageComponent } from './components/homepage/homepage.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
     {path: "", component: HomepageComponent}
@@ -12,11 +18,13 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    HomepageComponent
+    HomepageComponent,
   ],
   imports: [
     CommonModule,
-    MatButtonModule,MatSidenavModule,
+    MatButtonModule,MatSidenavModule, MatIconModule,
+    MatInputModule, MatFormFieldModule, MatListModule,
+    FormsModule, ReactiveFormsModule, 
     RouterModule.forChild(routes)
   ],
   providers: [],

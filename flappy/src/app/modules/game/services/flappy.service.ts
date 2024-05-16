@@ -4,6 +4,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { CameraService } from '../../../core/services/camera.service';
 import { Bird } from '../../../core/interfaces/flappyModel.interfaces';
 import { IGameService } from '../../../core/interfaces/gameService.interface';
+import { GameService } from '../../../core/services/game.service';
 
 @Injectable()
 export class FlappyService implements IGameService{
@@ -19,7 +20,8 @@ export class FlappyService implements IGameService{
   score$ = this.scoreSubject.asObservable(); 
 
   constructor(private obstacleService: ObstacleService,
-              private cameraService: CameraService) {}
+              private cameraService: CameraService,
+              private gameService: GameService) {}
 
   InitGameEnvironment(canvas: HTMLCanvasElement, bird: Bird): void {
     this.flappyCanvas = canvas;
@@ -36,18 +38,14 @@ export class FlappyService implements IGameService{
       await this.pushBird();
       await this.drawBird();
       await this.obstacleService.UpdateObstacle(this.flappyCanvas, this.score);
-      this.obstacleService.CheckCollision(this.bird, this.flappyCanvas.height, this.score)
-      .then(isCollide => {
-        if (isCollide) {this.StopGame();}
-        this.obstacleService.UpdateScore(this.bird, this.score).then(score => {
-          this.score = score;
-          this.updateScore(this.score);
-        })
-      }).finally(() => {
-        if (this.isStartGame){setTimeout(update,  15);}
-      })
+      const isCollide = await this.obstacleService.CheckCollision(this.bird, this.flappyCanvas.height, this.score);
+      if (isCollide) {this.StopGame();}
+      const score = await this.obstacleService.UpdateScore(this.bird, this.score);
+      this.score = score;
+      this.updateScore(this.score);
+      setTimeout(() => {if (this.isStartGame) {update();}}, 0);
     }
-    setTimeout(update, 15);
+    update();
   }
   private async drawBird() {
     this.ctx.beginPath();
@@ -75,8 +73,8 @@ export class FlappyService implements IGameService{
   }
 
   StartGame(): void {
-    this.GameProcessing(this.ctx);
     this.isStartGame = true;
+    this.GameProcessing(this.ctx);
     this.cameraService.isHandle = true;
   }
   StopGame(): void {
@@ -85,6 +83,7 @@ export class FlappyService implements IGameService{
     this.ctx.clearRect(0, 0, this.flappyCanvas.width, this.flappyCanvas.height);
     this.drawBird();
     this.obstacleService.ClearObstacles();
+    this.gameService.SetUserRecord("flappyScore", this.score);
     this.score = 0;
     this.updateScore(this.score);
     this.cameraService.isHandle = false;

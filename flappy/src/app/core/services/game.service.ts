@@ -1,19 +1,20 @@
 import { HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Game } from '../interfaces/gameModel.interface';
+import { GameModel } from '../interfaces/gameModel.interface';
 import { Observable, catchError, tap } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
   currentGameIndex: number = 0;
-  games: Game[];
+  games: GameModel[];
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private authService: AuthService){}
 
-  GetGames(): Observable<Game[]>{
-    return this.http.get<Game[]>("/api/v1/game/getGames").pipe(
+  GetGames(): Observable<GameModel[]>{
+    return this.http.get<GameModel[]>("/api/v1/game/getGames").pipe(
       tap(games => {
         this.games = games;
       })
@@ -28,5 +29,19 @@ export class GameService {
 
   GetRoute(): string{
     return this.games[this.currentGameIndex].route;
+  }
+
+  SetUserRecord(scoreName: string, value: number){
+    this.authService.getUser().subscribe(
+      userdata => {
+        if (userdata[scoreName] < value){
+          const data2send = {scoreName: scoreName, value: value};
+          userdata[scoreName] = value;
+          this.http.post<any>('api/v1/game/saveRecord', data2send).subscribe(response => {
+            console.log(response);
+          });
+        }
+      }
+    )
   }
 }

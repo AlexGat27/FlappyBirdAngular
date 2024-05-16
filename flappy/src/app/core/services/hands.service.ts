@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ComponentFactoryResolver, Injectable } from '@angular/core';
 import {FilesetResolver, HandLandmarker, HandLandmarkerResult} from '@mediapipe/tasks-vision'
 
 @Injectable({
@@ -24,7 +24,16 @@ export class HandsService {
     });
   }
 
-  ProcessVideo(video: HTMLVideoElement, startTimeMs: number): HandLandmarkerResult {
-    return this.handLandMaker.detectForVideo(video, startTimeMs);
+  ProcessVideo(video: HTMLVideoElement, startTimeMs: number): Promise<HandLandmarkerResult> {
+    return new Promise((resolve, reject) => {
+      try{
+        const result = this.handLandMaker.detectForVideo(video, startTimeMs)
+        console.log(result)
+        resolve(result)
+      }
+      catch (er){
+        reject(er)
+      }
+    });
   }
 }
