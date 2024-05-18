@@ -32,6 +32,7 @@ export class NupogodiService implements IGameService{
   }
   GameProcessing(ctx: CanvasRenderingContext2D): void {
     const update = async () => {
+      let startTimeFrame = performance.now();
       ctx.clearRect(0, 0, this.nupogodiCanvas.width, this.nupogodiCanvas.height);
       this.wolf.draw(ctx);
 
@@ -42,9 +43,10 @@ export class NupogodiService implements IGameService{
       this.score = this.wolfeggsService.UpdateScore(this.wolf, this.score);
       this.updateScore();
       this.updateHealth();
-      if (this.isStartGame){setTimeout(update,  15);}
+      let differenceTimeFrame = performance.now() - startTimeFrame;
+      setTimeout(() => {if (this.isStartGame) {update();}}, 17 - differenceTimeFrame);
     }
-    setTimeout(update, 15);
+    setTimeout(() => {if (this.isStartGame) {update();}}, 0);
   }
   private updateScore(){
     this.scoreSubject.next(this.score);

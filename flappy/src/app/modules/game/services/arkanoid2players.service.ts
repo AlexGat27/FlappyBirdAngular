@@ -29,14 +29,16 @@ export class Arkanoid2playersService implements IGameService{
   }
   GameProcessing(ctx: CanvasRenderingContext2D): void {
     const update = async () => {
+      let startTimeFrame = performance.now();
       ctx.clearRect(0, 0, this.arkanoidCanvas.width, this.arkanoidCanvas.height);
       this.ball.draw(ctx);
       this.leftBlock.draw(ctx);
       this.rightBlock.draw(ctx);
       this.moveBall();
-      if (this.isStartGame){setTimeout(update,  15);}
+      let differenceTimeFrame = performance.now() - startTimeFrame;
+      setTimeout(() => {if (this.isStartGame) {update();}}, 15 - differenceTimeFrame);
     }
-    setTimeout(update, 15);
+    setTimeout(() => {if (this.isStartGame) {update();}}, 0);
   }
   private updateScore(score: number){
     this.scoreSubject.next(score);
@@ -59,8 +61,8 @@ export class Arkanoid2playersService implements IGameService{
     if (this.ball.y + this.ball.speedY > this.arkanoidCanvas.height - this.ball.radius || this.ball.y + this.ball.speedY < this.ball.radius) {
       this.ball.speedY = -this.ball.speedY; 
     }
-    this.ball.x += this.ball.speedX * (1 + this.score*0.1);
-    this.ball.y += this.ball.speedY * (1 + this.score*0.1);
+    this.ball.x += this.ball.speedX * (1 + this.score*0.05);
+    this.ball.y += this.ball.speedY * (1 + this.score*0.05);
   }
 
   StartGame(): void {

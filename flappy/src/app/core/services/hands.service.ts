@@ -28,7 +28,6 @@ export class HandsService {
     return new Promise((resolve, reject) => {
       try{
         const result = this.handLandMaker.detectForVideo(video, startTimeMs)
-        console.log(result)
         resolve(result)
       }
       catch (er){

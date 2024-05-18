@@ -33,6 +33,7 @@ export class FlappyService implements IGameService{
   }
   GameProcessing(ctx: CanvasRenderingContext2D): void {
     const update = async () => {
+      let startTimeFrame = performance.now();
       ctx.clearRect(0, 0, this.flappyCanvas.width, this.flappyCanvas.height);
       await this.downBird();
       await this.pushBird();
@@ -43,7 +44,8 @@ export class FlappyService implements IGameService{
       const score = await this.obstacleService.UpdateScore(this.bird, this.score);
       this.score = score;
       this.updateScore(this.score);
-      setTimeout(() => {if (this.isStartGame) {update();}}, 0);
+      let differenceTimeFrame = performance.now() - startTimeFrame;
+      setTimeout(() => {if (this.isStartGame) {update();}}, 15 - differenceTimeFrame);
     }
     update();
   }

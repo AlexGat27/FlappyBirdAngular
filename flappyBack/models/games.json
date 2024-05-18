@@ -2,19 +2,19 @@
   {
     "id": 1,
     "name": "Flappy Bird",
-    "imageName": "f5d5f703b90c67bed9bb830fd40d94ae.jpg",
+    "imageName": "preview-flappy.png",
     "route": "flappy"
   },
   {
     "id": 2,
-    "name": "Arkanoid 2 Players",
-    "imageName": "amake_games.ru__ld_7_73812570.png",
+    "name": "Pong",
+    "imageName": "preview-pong.png",
     "route": "arkanoid2players"
   },
   {
     "id": 3,
     "name": "Nu Pogodi Eggs",
-    "imageName": "60.jpeg",
+    "imageName": "preview-nupogodi.png",
     "route": "nupogodi"
   }
 ]
