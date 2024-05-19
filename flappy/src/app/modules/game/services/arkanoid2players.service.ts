@@ -36,6 +36,7 @@ export class Arkanoid2playersService implements IGameService{
       this.rightBlock.draw(ctx);
       this.moveBall();
       let differenceTimeFrame = performance.now() - startTimeFrame;
+      console.log(differenceTimeFrame)
       setTimeout(() => {if (this.isStartGame) {update();}}, 15 - differenceTimeFrame);
     }
     setTimeout(() => {if (this.isStartGame) {update();}}, 0);

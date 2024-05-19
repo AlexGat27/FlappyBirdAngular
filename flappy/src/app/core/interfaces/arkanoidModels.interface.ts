@@ -3,8 +3,8 @@ export class Ball {
     y: number;
     color: string; 
     radius: number;
-    speedX: number = 1;
-    speedY: number = 1;
+    speedX: number = 2;
+    speedY: number = 2;
 
     constructor(x: number, y: number, color: string, radius: number) {
         this.x = x;

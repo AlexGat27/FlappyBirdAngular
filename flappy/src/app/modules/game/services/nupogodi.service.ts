@@ -44,7 +44,7 @@ export class NupogodiService implements IGameService{
       this.updateScore();
       this.updateHealth();
       let differenceTimeFrame = performance.now() - startTimeFrame;
-      setTimeout(() => {if (this.isStartGame) {update();}}, 17 - differenceTimeFrame);
+      setTimeout(() => {if (this.isStartGame) {update();}}, 17 - differenceTimeFrame*2);
     }
     setTimeout(() => {if (this.isStartGame) {update();}}, 0);
   }

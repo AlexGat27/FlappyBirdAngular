@@ -11,7 +11,7 @@ export class WolfEggsService {
   }
 
   Updateegg(canvas: HTMLCanvasElement, score: number): boolean{
-    if (this.eggs.length === 0 || Math.random() < (0.01 + score*0.001 < 0.04 ? 0.01 + score*0.001 : 0.04)){
+    if (this.eggs.length === 0 || Math.random() < (0.01 + score*0.005 < 0.04 ? 0.01 + score*0.005 : 0.04)){
       let flag = true;
       this.eggs.forEach(egg => {
         if (egg.y < 15) {
@@ -28,7 +28,7 @@ export class WolfEggsService {
         checkedOut = true;
       }else{
         egg.draw(canvas.getContext('2d'));
-        egg.y += 1 + score*0.02 < 1.5 ? 1 + score*0.02 : 1.5;
+        egg.y += 1 + score*0.02 < 2 ? 1 + score*0.02 : 2;
       }
     });
     return checkedOut;
